@@ -122,7 +122,7 @@ test('contrast, keyboard focus, responsive images, and missing routes work', asy
       (await page.locator('[data-post-paths]').getAttribute('data-post-paths')) ?? '[]'
     );
     await surprise.click();
-    expect(choices).toContain(new URL(page.url()).pathname.replace(/\/$/, ''));
+    await expect(page).toHaveURL((url) => choices.includes(url.pathname.replace(/\/$/, '')));
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await page.goto('/categories');
     const category = page.locator('main a[href="/categories/writing"]');

@@ -82,6 +82,8 @@ bun run preview
 
 Deploy **`apps/web/dist/`** to your static host. Use `bun install --frozen-lockfile` as the install command and `bun run build` as the build command. Keep the host's normal 404 handling rather than rewriting missing URLs to the homepage.
 
+For Vercel, import the repository with its root directory unchanged; `vercel.json` supplies the build settings and enables Git deployments only from `main`. The Paperline demo also disables preview deployments in its Vercel project settings, so contributor PRs do not trigger builds there.
+
 ## Development checks
 
 ```bash
@@ -93,7 +95,7 @@ bun run test:site
 bun run test:scenarios
 ```
 
-For browser tests, install the browsers once from `apps/web` with `bunx --no-install playwright install chromium firefox webkit`, then run `bun run test:browser` from the repository root after building. These checks cover Chromium, Firefox, and WebKit, including mobile layouts. The [GitHub workflow](.github/workflows/check.yml) also runs a dependency audit.
+For browser tests, install the browsers once from `apps/web` with `bunx --no-install playwright install chromium firefox webkit`, then run `bun run test:browser` from the repository root after building. These local checks cover Chromium, Firefox, and WebKit, including mobile layouts. To keep CI usage low, the [GitHub workflow](.github/workflows/check.yml) runs only formatting, lint, type checks, and a dependency audit; it does not build the site or run tests.
 
 Found a bug or have an idea? [Open an issue](https://github.com/antick/astro-paperline/issues). Contributions are welcome; run the checks above before opening a pull request.
 
