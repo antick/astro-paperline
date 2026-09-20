@@ -1,0 +1,47 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Container from '@components/Container.astro';
+import TaxonomyPostList from '@components/TaxonomyPostList.astro';
+import { getAllPosts } from '@utils/content';
+import { categories } from '@data/category';
+import { getCategorySlug } from '@utils/post';
+import { TAXONOMY } from '../../../../config';
+
+export async function getStaticPaths() {
+  return categories.flatMap((category) =>
+    (category.subcategories ?? []).map((subcategory) => ({
+      params: { category: category.slug, subcategory: subcategory.slug },
+      props: {
+        categoryTitle: category.title,
+        subcategoryTitle: subcategory.title
+      }
+    }))
+  );
+}
+
+interface Props {
+  categoryTitle: string;
+  subcategoryTitle: string;
+}
+
+const { category, subcategory } = Astro.params;
+const { categoryTitle, subcategoryTitle } = Astro.props;
+const posts = await getAllPosts();
+const matchingPosts = posts.filter(
+  (post) =>
+    getCategorySlug(post.data.category) === category && post.data.subcategory === subcategory
+);
+---
+
+<Layout
+  title={`${subcategoryTitle} - ${categoryTitle}`}
+  robots={{ index: matchingPosts.length > 0, follow: true }}
+>
+  <Container>
+    <TaxonomyPostList
+      title={subcategoryTitle}
+      description={`${TAXONOMY.sectionDescriptionLabel} ${categoryTitle}: ${subcategoryTitle}`}
+      posts={matchingPosts}
+    />
+  </Container>
+</Layout>

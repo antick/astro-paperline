@@ -1,0 +1,32 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Container from '@components/Container.astro';
+import PageTitle from '@components/PageTitle.astro';
+import { getAllPosts } from '@utils/content';
+import { getPopulatedCategories } from '@utils/post';
+import { TAXONOMY } from '@config';
+
+const categories = getPopulatedCategories(await getAllPosts());
+---
+
+<Layout title="Categories" robots={{ index: categories.length > 0, follow: true }}>
+  <Container>
+    <PageTitle>
+      <Fragment slot="title">Categories</Fragment>
+      <Fragment slot="desc">Browse all categories</Fragment>
+    </PageTitle>
+    {categories.length === 0 && <p class="empty-state">{TAXONOMY.emptyState}</p>}
+    <div>
+      <ul class="grid gap-6 md:grid-cols-2">
+        {categories.map((c) => (
+          <li class="p-4 rounded-md border border-gray-200 dark:border-gray-700">
+            <a href={`/categories/${c.slug}`} class="text-skin-accent font-medium">
+              {c.title}
+            </a>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{c.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Container>
+</Layout>

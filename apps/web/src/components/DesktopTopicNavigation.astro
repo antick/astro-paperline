@@ -1,0 +1,56 @@
+---
+import type { NavigationItem } from '@data/navigation';
+import { MASTHEAD } from '../config';
+import TopicToggle from './TopicToggle.astro';
+
+interface Props {
+  items: NavigationItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="topic-nav" aria-label="Topics">
+  {items.map((item) => (
+    <div class="topic-menu">
+      {item.children.length > 0 ? (
+        <>
+          <TopicToggle label={item.label} controls={`topics-${item.href.split('/').at(-1)}`} />
+          <div class="topic-dropdown" id={`topics-${item.href.split('/').at(-1)}`}>
+            <a class="topic-overview" href={item.href}>
+              {MASTHEAD.overviewLabel} {item.label}
+            </a>
+            {item.children.map((child) => (
+              <div class="topic-section">
+                {child.children.length > 0 ? (
+                  <>
+                    <TopicToggle
+                      label={child.label}
+                      nested
+                      controls={`topics-${item.href.split('/').at(-1)}-${child.href.split('/').at(-1)}`}
+                    />
+                    <div
+                      class="topic-flyout"
+                      id={`topics-${item.href.split('/').at(-1)}-${child.href.split('/').at(-1)}`}
+                    >
+                      <a class="topic-overview" href={child.href}>
+                        {MASTHEAD.sectionOverviewLabel} {child.label}
+                      </a>
+                      {child.children.map((grandchild) => (
+                        <a href={grandchild.href}>{grandchild.label}</a>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <a href={child.href}>{child.label}</a>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <a href={item.href}>{item.label}</a>
+      )}
+    </div>
+  ))}
+</nav>

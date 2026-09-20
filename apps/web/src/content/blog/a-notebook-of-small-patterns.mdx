@@ -1,0 +1,63 @@
+---
+title: 'A notebook of small patterns'
+description: 'Repeating shapes, a tiny code example, and an expandable note about making familiar things feel consistent.'
+pubDate: '2026-07-04'
+author: 'Paperline'
+authorUrl: '/about'
+category: 'Design'
+subcategory: 'visual'
+topic: 'patterns'
+tags: ['sample', 'design', 'code']
+draft: false
+ogImage: '../../assets/samples/a-notebook-of-small-patterns.webp'
+ogImageAlt: 'Striped paper rectangles, dotted circles, and a small staircase on an ink grid.'
+ogImageWidth: 1536
+ogImageHeight: 1024
+relatedPosts: ['when-the-interface-goes-quiet', 'postcards-from-an-imaginary-coast']
+---
+
+import Callout from '../../components/Callout.astro';
+
+_This sample pairs a design note with code and a reusable callout._
+
+## Notice what repeats
+
+A row of windows, the ruled lines in a notebook, and the handles on a chest of drawers all make a small promise: once you understand one, the next should feel familiar.
+
+A publication makes the same promise. A date belongs in the same place on each card. A category link should behave like its neighbors. Familiar patterns let the reader spend less time learning the page and more time reading it.
+
+## Keep the useful part
+
+For a paper exercise, imagine a small collection of labeled shapes:
+
+```js
+const shapes = [
+  { label: 'Window', shape: 'square' },
+  { label: 'Moon', shape: 'circle' },
+  { label: 'Roof', shape: 'triangle' }
+];
+
+const labels = shapes.map(({ label }) => label);
+console.log(labels.join(' / '));
+```
+
+The labels change. The structure stays steady. That is the useful part of a pattern: a shared shape with enough room for different content.
+
+<Callout title="A familiar shape, a different story">
+
+This note uses the same Callout component as the welcome article. Its title and contents change, while its spacing and appearance stay consistent.
+
+</Callout>
+
+## Allow a little variation
+
+Repetition does not require every page to look identical. A large cover can introduce a feature story. A short note may need only a few paragraphs. Both can share the same type, metadata, and reading width.
+
+<details>
+  <summary>What belongs in the pattern notebook?</summary>
+
+Keep the pieces you have used more than once: a title treatment, a useful list, a clear caption. A notebook is most helpful when it records what already works.
+
+</details>
+
+The final sketch was a row of circles, with one left open. It still belonged to the row. It simply gave the eye a place to stop.

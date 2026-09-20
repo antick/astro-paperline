@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Card from '@components/Card';
+import PageTitle from '@components/PageTitle.astro';
+import { TAXONOMY } from '../config';
+import { getPostPath } from '@utils/post';
+
+interface Props {
+  title: string;
+  description: string;
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { title, description, posts } = Astro.props;
+---
+
+<PageTitle>
+  <Fragment slot="title">{title}</Fragment>
+  <Fragment slot="desc">{description}</Fragment>
+</PageTitle>
+<div class="collection-list">
+  {posts.length > 0 ? (
+    <ul>
+      {posts.map((post) => (
+        <Card href={getPostPath(post)} frontmatter={post.data} />
+      ))}
+    </ul>
+  ) : (
+    <p class="empty-state">{TAXONOMY.emptyState}</p>
+  )}
+</div>

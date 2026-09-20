@@ -1,0 +1,143 @@
+@reference "./base.css";
+
+.prose {
+  @apply prose-headings:!mb-3 prose-headings:!font-bold prose-headings:!not-italic prose-headings:!text-skin-base prose-p:!text-skin-base prose-a:!text-skin-base prose-a:!decoration-dashed prose-a:underline-offset-8 hover:prose-a:text-skin-accent prose-blockquote:!border-l-skin-accent/50 prose-blockquote:opacity-80 prose-figcaption:!text-skin-base prose-figcaption:opacity-70 prose-strong:!text-skin-base prose-code:rounded prose-code:bg-skin-card/75 prose-code:p-1 prose-code:before:!content-none prose-code:after:!content-none prose-ol:!text-skin-base prose-ul:overflow-x-clip prose-ul:!text-skin-base prose-li:marker:!text-skin-accent prose-table:text-skin-base prose-th:border prose-th:border-skin-line prose-td:border prose-td:border-skin-line prose-img:!my-2 prose-img:mx-auto prose-img:border-2 prose-img:border-skin-line prose-hr:!border-skin-line;
+  width: 100%;
+  max-width: var(--article-reading-measure) !important;
+  margin-inline: auto;
+  font-size: 1.18rem !important;
+  line-height: 1.76;
+  letter-spacing: -0.004em;
+}
+.prose a {
+  @apply break-words hover:!text-skin-accent;
+}
+.prose pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+.prose thead th:first-child,
+.prose tbody td:first-child,
+.prose tfoot td:first-child {
+  padding-left: 0.5714286em;
+}
+.prose details {
+  @apply inline-block cursor-pointer select-none text-skin-base;
+}
+.prose summary {
+  @apply focus-outline;
+}
+.article-header {
+  @apply mx-auto min-w-0 pb-8 pt-12 md:pt-16 xl:col-start-2;
+  width: 100%;
+  max-width: var(--article-heading-measure);
+}
+.article-header h1 {
+  @apply mt-4 text-4xl font-semibold leading-[1.08] tracking-[-0.035em] md:text-6xl;
+  max-width: var(--article-heading-measure);
+}
+.article-header p {
+  @apply mt-5 text-xl leading-relaxed text-gray-600 dark:text-gray-300;
+  max-width: var(--article-summary-measure);
+}
+.article-meta {
+  @apply mt-7 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-400;
+}
+.article-meta a {
+  @apply font-semibold text-skin-accent hover:underline;
+}
+.article-cover {
+  @apply mx-auto aspect-[16/9] min-w-0 overflow-hidden rounded-xl bg-skin-card xl:col-start-2;
+  width: 100%;
+  max-width: var(--article-heading-measure);
+}
+.article-container {
+  @apply !pb-14 !pt-0;
+  max-width: var(--article-shell-measure) !important;
+}
+.article-container.has-article-toc {
+  @apply xl:grid;
+  grid-template-columns:
+    var(--article-toc-rail-measure)
+    minmax(0, var(--article-heading-measure))
+    var(--article-toc-rail-measure);
+  column-gap: var(--article-column-gap);
+  justify-content: center;
+}
+.article-body {
+  @apply mx-auto min-w-0 pt-8 md:pt-12 xl:col-start-2;
+  width: 100%;
+  max-width: var(--article-heading-measure);
+}
+.article-container:not(.has-article-toc) :is(.article-header, .article-cover, .article-body) {
+  @apply mx-auto;
+  max-width: var(--article-heading-measure);
+}
+.article-toc-column {
+  @apply hidden xl:sticky xl:top-24 xl:col-start-3 xl:row-start-3 xl:block xl:max-h-[calc(100vh-7rem)] xl:self-start xl:overflow-y-auto xl:pt-12;
+}
+.article-toc-mobile {
+  @apply mx-auto mt-8 w-full rounded-xl border border-skin-line bg-skin-panel p-4 xl:hidden;
+  max-width: var(--article-heading-measure);
+}
+.article-toc-mobile summary {
+  @apply cursor-pointer text-xs font-extrabold uppercase tracking-[0.14em];
+}
+.article-toc-mobile[open] .article-toc {
+  @apply mt-4;
+}
+.article-toc {
+  @apply border-l-2 border-skin-line pl-4;
+}
+.article-toc-header {
+  @apply mb-2 flex items-baseline justify-between gap-4 border-b border-skin-line pb-3;
+}
+.article-toc-header h2 {
+  @apply text-caption font-extrabold uppercase tracking-[0.16em];
+}
+.article-toc-header > span {
+  @apply text-caption font-semibold uppercase tracking-[0.08em] text-gray-600 dark:text-gray-400;
+}
+.article-toc li {
+  @apply mt-2;
+}
+.article-toc a {
+  @apply block border-l-2 border-transparent py-0.5 pl-2 text-xs font-medium leading-snug text-gray-600 transition-colors hover:text-skin-accent dark:text-gray-400;
+}
+.article-toc a.is-active {
+  @apply border-skin-accent font-bold text-skin-accent;
+}
+.article-toc-nested a {
+  @apply pl-5;
+}
+.article-toc-deep a {
+  @apply pl-8;
+}
+.prose [id] {
+  scroll-margin-top: 9rem;
+}
+.article-tags {
+  @apply mt-10 flex flex-wrap gap-2 border-t border-skin-line pt-7;
+}
+.article-tags a {
+  @apply rounded-full bg-skin-card px-3 py-1 text-sm no-underline;
+}
+.article-footer-link {
+  @apply mt-10 border-t border-skin-line pt-8 text-sm font-medium text-skin-accent;
+}
+.related-posts {
+  @apply mt-12;
+}
+
+.article-callout {
+  @apply my-8 rounded-lg border-l-4 border-skin-accent bg-skin-card p-5;
+}
+.article-callout > :last-child {
+  margin-bottom: 0;
+}
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}

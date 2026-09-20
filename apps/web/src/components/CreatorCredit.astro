@@ -1,0 +1,14 @@
+---
+import { CREATOR } from '@data/creator';
+---
+
+<p class="creator-credit">
+  {CREATOR.creditPrefix}
+  <span class="creator-heart" role="img" aria-label="love">
+    ♥
+  </span>
+  {CREATOR.creditBy}
+  <a href={CREATOR.portfolio} rel="author">
+    {CREATOR.name}
+  </a>
+</p>

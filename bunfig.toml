@@ -1,0 +1,5 @@
+[install]
+# Use Bun workspaces exclusively for this monorepo.
+exact = true
+# Apply the repository's two-day release-age rule to dependency resolution.
+minimumReleaseAge = 172800

@@ -1,0 +1,32 @@
+@reference './base.css';
+
+@layer components {
+  .demo-banner {
+    @apply relative bg-skin-accent text-skin-inverted;
+  }
+  .demo-banner-content {
+    @apply mx-auto flex min-h-12 max-w-screen-xl flex-wrap items-center justify-center gap-x-5 gap-y-1 py-2 pl-4 pr-14 text-center text-xs sm:px-16 sm:text-sm;
+  }
+  .demo-banner-link {
+    @apply inline-flex items-center gap-2 py-1 font-semibold underline decoration-current/50 underline-offset-4 hover:decoration-current;
+  }
+  .demo-banner-link .repository-icon {
+    @apply size-4 fill-current;
+  }
+  .demo-banner-dismiss {
+    @apply absolute right-1 top-1/2 inline-flex size-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-inherit sm:right-4;
+  }
+  .demo-banner-dismiss svg {
+    @apply size-4 fill-none stroke-current;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+  }
+  .demo-banner :is(a, button):focus-visible {
+    outline: 2px dashed currentColor;
+    outline-offset: 2px;
+  }
+  .demo-banner[hidden],
+  .demo-banner-dismiss[hidden] {
+    display: none;
+  }
+}

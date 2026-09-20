@@ -1,0 +1,65 @@
+@reference './base.css';
+
+@layer components {
+  .not-found {
+    @apply mx-auto grid max-w-6xl items-center gap-8 py-6 md:grid-cols-2 md:gap-16 md:py-20;
+  }
+  .missing-page-art {
+    @apply relative mx-auto flex w-full max-w-64 items-center justify-center px-5 py-7 md:max-w-md;
+  }
+  .missing-page-art::before {
+    @apply absolute inset-0 rounded-full bg-skin-panel;
+    content: '';
+  }
+  .missing-sheet {
+    @apply relative flex aspect-[4/5] w-full max-w-80 flex-col border border-skin-line bg-skin-fill px-7 py-8;
+    transform: rotate(-6deg);
+    box-shadow:
+      8px 10px 0 rgb(var(--color-card)),
+      9px 11px 0 rgb(var(--color-border));
+  }
+  .missing-sheet-label {
+    @apply border-b border-skin-line pb-3 text-[0.65rem] font-semibold uppercase tracking-[0.16em];
+  }
+  .missing-sheet-number {
+    @apply my-auto block text-[clamp(6rem,16vw,9rem)] leading-none tracking-[-0.09em];
+  }
+  .missing-sheet-number > span {
+    @apply text-skin-accent;
+  }
+  .missing-sheet-lines {
+    @apply mb-5 block h-10 w-2/3;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgb(var(--color-border)) 0 1px,
+      transparent 1px 12px
+    );
+  }
+  .missing-sheet-note {
+    @apply text-sm italic text-skin-accent;
+  }
+  .not-found-eyebrow {
+    @apply mb-5 text-caption font-bold uppercase tracking-[0.18em] text-skin-accent;
+  }
+  .not-found-copy h1 {
+    @apply max-w-md text-5xl font-medium leading-[1.02] tracking-[-0.04em] lg:text-6xl;
+  }
+  .not-found-description {
+    @apply mt-6 max-w-md text-base leading-relaxed text-gray-600 dark:text-gray-300;
+  }
+  .not-found-home {
+    @apply mt-8 inline-flex min-h-12 items-center gap-3 rounded-full bg-skin-accent px-5 py-3 text-sm font-semibold text-skin-inverted transition-opacity hover:opacity-90;
+  }
+  .not-found-links {
+    @apply mt-10 border-t border-skin-line;
+  }
+  .not-found-links a {
+    @apply flex items-center justify-between gap-4 border-b border-skin-line py-4 transition-colors hover:text-skin-accent;
+  }
+  .not-found-links strong {
+    @apply block text-sm font-semibold;
+  }
+  .not-found-links small {
+    @apply mt-1 block text-caption text-gray-600 dark:text-gray-400;
+  }
+}

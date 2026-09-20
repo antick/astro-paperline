@@ -1,0 +1,142 @@
+@reference "./base.css";
+
+@layer components {
+  .site-header {
+    @apply sticky top-0 z-50 border-b border-skin-line bg-skin-fill/95 backdrop-blur;
+    box-shadow: 0 1px 0 rgb(var(--color-text-base) / 0.03);
+  }
+  .primary-nav {
+    @apply flex min-h-20 items-center gap-2 py-3 sm:gap-4;
+  }
+  .primary-nav .brand {
+    @apply min-w-0 shrink gap-2 sm:gap-3;
+  }
+  .primary-nav .brand-mark {
+    @apply h-8 sm:h-10;
+  }
+  .primary-nav .brand-name {
+    @apply text-xl sm:text-[1.875rem];
+  }
+  .primary-nav .brand-tagline {
+    @apply hidden sm:block;
+  }
+  .header-actions {
+    @apply flex shrink-0 items-center sm:gap-1;
+  }
+  .repository-link {
+    @apply inline-flex size-11 items-center justify-center rounded-full text-skin-base transition-colors hover:text-skin-accent;
+  }
+  .repository-link .repository-icon {
+    @apply size-5 fill-current;
+  }
+  .topic-nav a,
+  .topic-nav button,
+  .mobile-nav a {
+    @apply transition-colors hover:text-skin-accent;
+  }
+  .menu-button {
+    @apply shrink-0 rounded-full p-2 text-gray-600 dark:text-gray-300 lg:hidden;
+  }
+  .theme-toggle {
+    @apply focus-outline inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-skin-base transition-colors hover:text-skin-accent;
+    appearance: none;
+  }
+  .theme-toggle .theme-toggle-icon {
+    @apply size-5 fill-none;
+  }
+  .topic-nav {
+    @apply relative hidden items-center gap-4 text-xs font-semibold uppercase tracking-[0.06em] text-gray-600 dark:text-gray-300 lg:flex xl:gap-6;
+  }
+  .topic-menu {
+    @apply relative flex items-center py-3;
+  }
+  .topic-menu > a {
+    @apply font-semibold;
+  }
+  .topic-toggle,
+  .topic-subtoggle {
+    @apply focus-outline flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-sm font-semibold;
+  }
+  .topic-toggle {
+    @apply uppercase tracking-[0.06em];
+  }
+  .topic-subtoggle {
+    @apply w-full px-3 py-2 text-left text-sm normal-case tracking-normal hover:bg-skin-panel;
+  }
+  .topic-toggle::after,
+  .topic-subtoggle::after {
+    height: 0.35rem;
+    width: 0.35rem;
+    border-bottom: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+    content: '';
+    flex-shrink: 0;
+    transition: transform 160ms ease;
+  }
+  .topic-toggle::after,
+  .topic-subtoggle::after {
+    transform: translateY(-0.1rem) rotate(45deg);
+  }
+  .topic-toggle[aria-expanded='true']::after,
+  .topic-subtoggle[aria-expanded='true']::after {
+    transform: translateY(0.1rem) rotate(225deg);
+  }
+  .topic-dropdown,
+  .topic-flyout {
+    @apply invisible absolute border border-skin-line bg-skin-fill p-2 opacity-0 shadow-xl transition-all;
+    pointer-events: none;
+  }
+  .topic-dropdown {
+    @apply left-0 top-full min-w-56 translate-y-2;
+  }
+  .topic-menu:last-child > .topic-dropdown {
+    @apply left-auto right-0;
+  }
+  .topic-flyout {
+    @apply left-full top-0 min-w-72 -translate-x-2;
+  }
+  .topic-dropdown a,
+  .topic-flyout a {
+    @apply block whitespace-normal px-3 py-2 text-sm normal-case tracking-normal;
+  }
+  .topic-dropdown .topic-overview,
+  .topic-flyout .topic-overview {
+    @apply mb-1 border-b border-skin-line pb-3 font-bold;
+  }
+  .topic-toggle[aria-expanded='true'] + .topic-dropdown {
+    @apply visible translate-y-0 opacity-100;
+    pointer-events: auto;
+  }
+  .topic-section {
+    @apply relative;
+  }
+  .topic-subtoggle[aria-expanded='true'] + .topic-flyout {
+    @apply visible translate-x-0 opacity-100;
+    pointer-events: auto;
+  }
+  .topic-menu:nth-last-child(-n + 4) .topic-flyout {
+    @apply left-auto right-full;
+  }
+  .mobile-nav {
+    @apply max-h-[calc(100svh-6rem)] overflow-y-auto border-t border-skin-line py-5 text-sm lg:hidden;
+  }
+  .mobile-nav > p {
+    @apply pb-2 text-caption font-bold uppercase tracking-[0.18em] text-gray-600;
+  }
+  .mobile-nav > details,
+  .mobile-topic-direct {
+    @apply block border-b border-skin-line py-3;
+  }
+  .mobile-nav summary {
+    @apply cursor-pointer font-semibold;
+  }
+  .mobile-topic-links {
+    @apply grid gap-2 pb-1 pt-3 text-gray-600 dark:text-gray-300;
+  }
+  .mobile-submenu {
+    @apply rounded-lg bg-skin-panel px-3 py-2;
+  }
+  .mobile-submenu > div {
+    @apply grid gap-2 pb-1 pl-3 pt-3 text-sm;
+  }
+}

@@ -1,0 +1,47 @@
+---
+import type { NavigationItem } from '@data/navigation';
+import { MASTHEAD } from '../config';
+
+interface Props {
+  items: NavigationItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav id="mobile-navigation" class="mobile-nav hidden" aria-label="Mobile navigation">
+  <p>{MASTHEAD.menuLabel}</p>
+  {items.map((item) =>
+    item.children.length > 0 ? (
+      <details>
+        <summary>{item.label}</summary>
+        <div class="mobile-topic-links">
+          <a href={item.href}>
+            {MASTHEAD.overviewLabel} {item.label}
+          </a>
+          {item.children.map((child) =>
+            child.children.length > 0 ? (
+              <details class="mobile-submenu">
+                <summary>{child.label}</summary>
+                <div>
+                  <a href={child.href}>
+                    {MASTHEAD.sectionOverviewLabel} {child.label}
+                  </a>
+                  {child.children.map((grandchild) => (
+                    <a href={grandchild.href}>{grandchild.label}</a>
+                  ))}
+                </div>
+              </details>
+            ) : (
+              <a href={child.href}>{child.label}</a>
+            )
+          )}
+        </div>
+      </details>
+    ) : (
+      <a class="mobile-topic-direct" href={item.href}>
+        {item.label}
+      </a>
+    )
+  )}
+</nav>

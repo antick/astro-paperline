@@ -1,0 +1,46 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Paperline static feeds",
+    "version": "1.0.0",
+    "description": "Generated public feed and crawler endpoints. Publication rules match the site."
+  },
+  "paths": {
+    "/rss.xml": {
+      "get": {
+        "operationId": "getRssFeed",
+        "summary": "RSS feed of published articles",
+        "responses": {
+          "200": {
+            "description": "Draft and future articles are excluded; dates use the publication timestamp.",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/robots.txt": {
+      "get": {
+        "operationId": "getRobots",
+        "summary": "Crawler directives and sitemap location",
+        "responses": {
+          "200": {
+            "description": "Public crawler instructions.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

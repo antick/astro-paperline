@@ -1,0 +1,26 @@
+---
+import Container from './Container.astro';
+import Brand from './Brand.astro';
+import CreatorCredit from './CreatorCredit.astro';
+import { footerNavigation } from '@data/navigation';
+import { SITE } from '../config';
+---
+
+<footer class="site-footer">
+  <Container class="!py-10">
+    <div class="footer-inner">
+      <Brand tagline={false} />
+      <nav aria-label="Footer navigation">
+        {footerNavigation.map((link) => (
+          <a href={link.href}>{link.label}</a>
+        ))}
+      </nav>
+    </div>
+    <div class="footer-details">
+      <p>
+        © {new Date().getFullYear()} {SITE.title}
+      </p>
+      <CreatorCredit />
+    </div>
+  </Container>
+</footer>

@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCoverImage from '@components/PostCoverImage.astro';
+import { getFormattedDate } from '@utils/all';
+import { getCategoryDetails, getPostImage, getPostPath } from '@utils/post';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  preloadImage?: boolean;
+}
+
+const { post, preloadImage = false } = Astro.props;
+const category = getCategoryDetails(post.data.category);
+const image = getPostImage(post);
+const path = getPostPath(post);
+---
+
+<article class="story-preview">
+  <div class="story-copy">
+    <a class="story-topic" href={`/categories/${category.slug}`}>
+      {category.title}
+    </a>
+    <h2>
+      <a href={path}>{post.data.title}</a>
+    </h2>
+    {post.data.excerpt && (
+      <p>
+        <a href={path}>{post.data.excerpt}</a>
+      </p>
+    )}
+    <time datetime={post.data.publishDate.toISOString()}>
+      {getFormattedDate(post.data.publishDate)}
+    </time>
+  </div>
+  <a href={path} class="story-image" tabindex="-1" aria-hidden="true">
+    <PostCoverImage
+      src={image.light}
+      darkSrc={image.dark}
+      alt={image.alt}
+      title={post.data.title}
+      loading={preloadImage ? 'eager' : 'lazy'}
+      width={360}
+      height={240}
+      widths={[180, 360]}
+      sizes="(max-width: 640px) 120px, 180px"
+      class="h-full w-full object-cover"
+    />
+  </a>
+</article>

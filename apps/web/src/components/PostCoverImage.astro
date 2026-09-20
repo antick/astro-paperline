@@ -1,0 +1,59 @@
+---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import PlaceholderImage from '@assets/paperline-placeholder.webp';
+
+interface Props {
+  src?: string | ImageMetadata;
+  darkSrc?: string | ImageMetadata;
+  alt: string;
+  title?: string;
+  width?: number;
+  height?: number;
+  widths?: number[];
+  sizes?: string;
+  loading?: 'eager' | 'lazy';
+  class?: string;
+}
+
+const {
+  src = PlaceholderImage,
+  darkSrc,
+  alt,
+  title = alt,
+  width = 800,
+  height = 450,
+  widths = [200, 400, 800],
+  sizes = '(max-width: 640px) 90vw, 480px',
+  loading = 'lazy',
+  class: className = 'w-full h-full rounded-md'
+} = Astro.props;
+const hasDarkImage =
+  darkSrc &&
+  (typeof darkSrc === 'string' ? darkSrc : darkSrc.src) !==
+    (typeof src === 'string' ? src : src.src);
+const sources = [{ source: src, className: 'post-cover-light' }];
+if (hasDarkImage && darkSrc) sources.push({ source: darkSrc, className: 'post-cover-dark' });
+const images = await Promise.all(
+  sources.map(async ({ source, className }) => ({
+    image: await getImage({ src: source, width, height, widths, format: 'webp' }),
+    className
+  }))
+);
+---
+
+<span class:list={['post-cover-source', className]}>
+  {images.map(({ image, className: imageClass }) => (
+    <img
+      {...image.attributes}
+      src={image.src}
+      srcset={image.srcSet.attribute || undefined}
+      {sizes}
+      {alt}
+      {title}
+      {loading}
+      decoding="async"
+      class={imageClass}
+    />
+  ))}
+</span>

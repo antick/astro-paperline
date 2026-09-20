@@ -1,0 +1,23 @@
+---
+import PaperlineMark from '@assets/paperline-mark.svg';
+import { MASTHEAD, SITE } from '@config';
+
+interface Props {
+  tagline?: boolean;
+}
+
+const { tagline = true } = Astro.props;
+---
+
+<a class="brand" href="/" aria-label={`${SITE.title} home`}>
+  <PaperlineMark class="brand-mark" aria-hidden="true" />
+  <span class="brand-copy">
+    <span class="brand-name">
+      {SITE.title.toLowerCase()}
+      <span class="brand-dot" aria-hidden="true">
+        .
+      </span>
+    </span>
+    {tagline && <span class="brand-tagline">{MASTHEAD.label}</span>}
+  </span>
+</a>

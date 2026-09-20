@@ -1,0 +1,54 @@
+---
+import Container from '@components/Container.astro';
+import CreatorCredit from '@components/CreatorCredit.astro';
+import Layout from '@layouts/Layout.astro';
+import PageTitle from '@components/PageTitle.astro';
+import { ARTICLE } from '@config';
+import { CREATOR } from '@data/creator';
+import '../styles/about.css';
+---
+
+<Layout title="About" desc="Meet Paperline, an open-source Astro theme made with love by Sanam.">
+  <Container>
+    <PageTitle>
+      <Fragment slot="title">A little room for your ideas.</Fragment>
+      <Fragment slot="desc">An open-source theme, with a person behind it.</Fragment>
+    </PageTitle>
+    <div class="about-content">
+      <section aria-labelledby="about-paperline">
+        <h2 id="about-paperline">A home for thoughtful writing</h2>
+        <p>
+          A good story needs room to breathe. Paperline pairs comfortable reading type with clear
+          navigation, generous spacing, and light and dark themes. It is a home for personal essays,
+          project notes, and anything you want to put into words.
+        </p>
+        <p>
+          Every article in this demo is sample content. The stories and illustrations show the theme
+          in use, from headings and quotes to lists, tables, and code. Replace them with your own
+          stories and make the space yours.
+        </p>
+        <div class="about-links">
+          <a href={ARTICLE.archivePath}>Explore the sample collection</a>
+        </div>
+      </section>
+      <section class="about-creator" aria-labelledby="about-creator">
+        <h2 id="about-creator">The person behind Paperline</h2>
+        <CreatorCredit />
+        <p>{CREATOR.bio}</p>
+        <p>
+          Paperline is one of my open-source projects. You can find more of my work on GitHub, or
+          visit my personal site for projects, notes, and things I’m exploring.
+        </p>
+        <ul class="about-links" aria-label="Find Sanam online">
+          {CREATOR.links.map(({ label, href }) => (
+            <li>
+              <a href={href} rel="author">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  </Container>
+</Layout>

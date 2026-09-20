@@ -1,0 +1,26 @@
+---
+import Container from '@components/Container.astro';
+import PageTitle from '@components/PageTitle.astro';
+import PostList from '@components/PostList.astro';
+import Layout from '@layouts/Layout.astro';
+import { SITE } from '@config';
+import { getAllPosts } from '@utils/content';
+
+const latestPosts = await getAllPosts();
+---
+
+<Layout title="Archive">
+  <Container>
+    <PageTitle>
+      <Fragment slot="title">Archive</Fragment>
+      <Fragment slot="desc">See all posts written on {SITE.title}.</Fragment>
+    </PageTitle>
+    <div>
+      <div class="story-list mx-auto mt-8 max-w-3xl">
+        {latestPosts.map((post) => (
+          <PostList post={post} />
+        ))}
+      </div>
+    </div>
+  </Container>
+</Layout>

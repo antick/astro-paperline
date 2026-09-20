@@ -1,0 +1,47 @@
+<script>
+  const roots = /** @type {NodeListOf<HTMLElement>} */ (
+    document.querySelectorAll('[data-article-toc-root]')
+  );
+
+  roots.forEach((root) => {
+    const links = /** @type {HTMLAnchorElement[]} */ (
+      Array.from(root.querySelectorAll('[data-toc-link]'))
+    );
+    const headingIds = [
+      ...new Set(links.map((link) => link.getAttribute('data-toc-link') ?? '').filter(Boolean))
+    ];
+    const headings = headingIds
+      .map((id) => document.getElementById(id))
+      .filter((heading) => heading !== null);
+    const offset = Number(root.getAttribute('data-active-heading-offset')) || 0;
+    const bottomOffset = Number(root.getAttribute('data-bottom-activation-offset')) || 0;
+    let frame = 0;
+
+    const updateActiveHeading = () => {
+      const isAtDocumentEnd =
+        Math.ceil(window.scrollY + window.innerHeight) >=
+        document.documentElement.scrollHeight - bottomOffset;
+      const activeHeading = isAtDocumentEnd
+        ? headings.at(-1)
+        : headings.reduce((current, heading) => {
+            return heading.getBoundingClientRect().top <= offset ? heading : current;
+          }, headings[0]);
+
+      links.forEach((link) => {
+        const isActive = link.getAttribute('data-toc-link') === activeHeading?.id;
+        link.classList.toggle('is-active', isActive);
+        if (isActive) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    const requestUpdate = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(updateActiveHeading);
+    };
+
+    updateActiveHeading();
+    document.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
+  });
+</script>

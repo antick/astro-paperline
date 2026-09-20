@@ -1,0 +1,42 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Container from '@components/Container.astro';
+import { NOT_FOUND } from '@config';
+import '../styles/not-found.css';
+---
+
+<Layout title={NOT_FOUND.eyebrow} robots={{ index: false, follow: true }}>
+  <Container>
+    <section class="not-found" aria-labelledby="missing-page-title">
+      <div class="missing-page-art" aria-hidden="true">
+        <div class="missing-sheet">
+          <span class="missing-sheet-label">{NOT_FOUND.illustrationLabel}</span>
+          <span class="missing-sheet-number">
+            404<span>.</span>
+          </span>
+          <span class="missing-sheet-lines"></span>
+          <span class="missing-sheet-note">{NOT_FOUND.note}</span>
+        </div>
+      </div>
+      <div class="not-found-copy">
+        <p class="not-found-eyebrow">{NOT_FOUND.eyebrow}</p>
+        <h1 id="missing-page-title">{NOT_FOUND.title}</h1>
+        <p class="not-found-description">{NOT_FOUND.description}</p>
+        <a class="not-found-home" href={NOT_FOUND.home.href}>
+          <span aria-hidden="true">←</span> {NOT_FOUND.home.label}
+        </a>
+        <div class="not-found-links">
+          {NOT_FOUND.links.map((link) => (
+            <a href={link.href}>
+              <span>
+                <strong>{link.label}</strong>
+                <small>{link.description}</small>
+              </span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </Container>
+</Layout>

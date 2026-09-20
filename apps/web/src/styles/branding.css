@@ -1,0 +1,22 @@
+@reference "./base.css";
+
+@layer components {
+  .brand {
+    @apply mr-auto inline-flex shrink-0 items-center gap-3 text-skin-base;
+  }
+  .brand-mark {
+    @apply h-10 w-auto shrink-0 fill-none text-skin-accent;
+  }
+  .brand-copy {
+    @apply flex min-w-0 flex-col gap-2;
+  }
+  .brand-name {
+    @apply whitespace-nowrap text-2xl sm:text-[1.875rem] font-semibold leading-none tracking-[-0.035em];
+  }
+  .brand-dot {
+    @apply text-skin-accent;
+  }
+  .brand-tagline {
+    @apply text-caption font-medium uppercase leading-normal tracking-[0.16em] text-gray-600 dark:text-gray-300;
+  }
+}

@@ -1,0 +1,18 @@
+---
+interface Props {
+  label: string;
+  controls: string;
+  nested?: boolean;
+}
+
+const { label, controls, nested = false } = Astro.props;
+---
+
+<button
+  class={nested ? 'topic-subtoggle' : 'topic-toggle'}
+  type="button"
+  aria-expanded="false"
+  aria-controls={controls}
+>
+  {label}
+</button>

@@ -1,0 +1,37 @@
+---
+import { getAllPosts } from '@utils/content';
+import { UI } from '@config';
+import PageTitle from '@components/PageTitle.astro';
+import Layout from '@layouts/Layout.astro';
+import Container from '@components/Container.astro';
+import SearchBar from '@components/Search';
+import { getPostSlug } from '@utils/post';
+
+// Retrieve all published articles
+const posts = await getAllPosts();
+
+// List of items to search in
+const searchList = posts.map((post) => ({
+  title: post.data.title,
+  description: post.data.excerpt,
+  data: {
+    title: post.data.title,
+    excerpt: post.data.excerpt,
+    publishDate: post.data.publishDate,
+    updatedDate: post.data.updatedDate
+  },
+  slug: getPostSlug(post)
+}));
+---
+
+<Layout title={UI.searchTitle} robots={{ index: false, follow: true }}>
+  <Container>
+    <PageTitle>
+      <Fragment slot="title">{UI.searchTitle}</Fragment>
+      <Fragment slot="desc">{UI.searchDescription}</Fragment>
+    </PageTitle>
+    <div>
+      <SearchBar client:load searchList={searchList} />
+    </div>
+  </Container>
+</Layout>

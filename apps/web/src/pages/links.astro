@@ -1,0 +1,80 @@
+---
+import Layout from '@layouts/Layout.astro';
+import allLinks from '@data/links';
+import { getAllPosts } from '@utils/content';
+import { getPostPath } from '@utils/post';
+import { footerNavigation } from '@data/navigation';
+import { SITE, UI } from '@config';
+import PageTitle from '@components/PageTitle.astro';
+import { getFormattedDate } from '@utils/all';
+import Container from '@components/Container.astro';
+
+const availablePaths = new Set([
+  ...(await getAllPosts()).map(getPostPath),
+  ...footerNavigation.map((link) => link.href)
+]);
+const linkGroups = allLinks
+  .map((group) => ({
+    ...group,
+    data: group.data.filter((link) => {
+      const url = new URL(link.url, SITE.website);
+      return (
+        url.origin !== new URL(SITE.website).origin ||
+        availablePaths.has(url.pathname.replace(/\/$/, '') || '/')
+      );
+    })
+  }))
+  .filter((group) => group.data.length > 0);
+---
+
+<Layout title={UI.linksTitle}>
+  <Container>
+    <PageTitle>
+      <Fragment slot="title">{UI.linksTitle}</Fragment>
+      <Fragment slot="desc">{UI.linksDescription}</Fragment>
+    </PageTitle>
+    {linkGroups.length === 0 && <p class="empty-state">{UI.emptyLinks}</p>}
+    <div>
+      <div>
+        {linkGroups.map((data) => (
+          <>
+            <h2 class="font-bold text-xl pt-8 pb-2">{data.category}</h2>
+
+            <ul class="space-y-4">
+              {data.data &&
+                data.data.map((link) => (
+                  <li class="grid gap-2 sm:grid-cols-[auto_1fr] sm:col-start-2 items-center">
+                    <time
+                      datetime={link.publishedDate}
+                      class="min-w-[110px] text-gray-600 dark:text-gray-400"
+                    >
+                      {getFormattedDate(link.publishedDate)}
+                    </time>
+                    <div>
+                      <a
+                        class="flex text-lg font-medium text-skin-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
+                        href={link.url}
+                      >
+                        <span class="text-lg font-medium decoration-dashed hover:underline">
+                          {link.label}
+                        </span>
+                        <svg
+                          aria-hidden="true"
+                          class="w-4 ml-1"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M18,10.82a1,1,0,0,0-1,1V19a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V8A1,1,0,0,1,5,7h7.18a1,1,0,0,0,0-2H5A3,3,0,0,0,2,8V19a3,3,0,0,0,3,3H16a3,3,0,0,0,3-3V11.82A1,1,0,0,0,18,10.82Zm3.92-8.2a1,1,0,0,0-.54-.54A1,1,0,0,0,21,2H15a1,1,0,0,0,0,2h3.59L8.29,14.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L20,5.41V9a1,1,0,0,0,2,0V3A1,1,0,0,0,21.92,2.62Z" />
+                        </svg>
+                      </a>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </>
+        ))}
+      </div>
+    </div>
+  </Container>
+</Layout>

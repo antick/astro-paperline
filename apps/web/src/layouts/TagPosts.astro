@@ -1,0 +1,41 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+import Card from '@components/Card';
+import Container from '@components/Container.astro';
+import PageTitle from '@components/PageTitle.astro';
+import Pagination from '@components/Pagination.astro';
+import { getPostPath } from '@utils/post';
+
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  paginatedPosts: CollectionEntry<'blog'>[];
+  tag: string;
+  tagName: string;
+}
+
+const { currentPage, totalPages, paginatedPosts, tag, tagName } = Astro.props;
+---
+
+<Layout title={`Tag: ${tagName}`}>
+  <Container>
+    <PageTitle>
+      <Fragment slot="title">Tag: {tagName}</Fragment>
+      <Fragment slot="desc">Posts tagged with {tagName}</Fragment>
+    </PageTitle>
+    <div>
+      <ul>
+        {paginatedPosts.map((post) => (
+          <Card href={getPostPath(post)} frontmatter={post.data} />
+        ))}
+      </ul>
+    </div>
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      prevUrl={`/tags/${tag}${currentPage - 1 !== 1 ? '/' + (currentPage - 1) : ''}/`}
+      nextUrl={`/tags/${tag}/${currentPage + 1}/`}
+    />
+  </Container>
+</Layout>

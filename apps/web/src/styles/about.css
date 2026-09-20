@@ -1,0 +1,22 @@
+@reference "./base.css";
+
+@layer components {
+  .about-content {
+    @apply mx-auto max-w-2xl space-y-10 py-12 text-lg leading-relaxed;
+  }
+  .about-content section {
+    @apply space-y-5;
+  }
+  .about-content h2 {
+    @apply text-2xl font-semibold leading-snug;
+  }
+  .about-creator {
+    @apply border-t border-skin-line pt-8;
+  }
+  .about-links {
+    @apply flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium;
+  }
+  .about-links a {
+    @apply text-skin-accent underline decoration-dotted underline-offset-4 hover:decoration-solid;
+  }
+}

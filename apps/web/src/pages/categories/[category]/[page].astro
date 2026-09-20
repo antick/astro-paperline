@@ -1,0 +1,55 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Container from '@components/Container.astro';
+import TaxonomyPostList from '@components/TaxonomyPostList.astro';
+import Pagination from '@components/Pagination.astro';
+import { getAllPosts } from '@utils/content';
+import getPageNumbers from '@utils/getPageNumbers';
+import getPagination from '@utils/getPagination';
+import { categories, type Category } from '@data/category';
+import { getCategorySlug, getCategoryDetails } from '@utils/post';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  const slugs = categories.map((c) => c.slug);
+
+  return slugs.flatMap((category) => {
+    const catPosts = posts.filter((p) => getCategorySlug(p.data.category) === category);
+    const totalPages = getPageNumbers(catPosts.length);
+    return totalPages
+      .filter((page) => page > 1)
+      .map((page) => ({
+        params: { category, page: String(page) },
+        props: { category }
+      }));
+  });
+}
+
+const { page } = Astro.params;
+interface Props {
+  category: Category['slug'];
+}
+const { category } = Astro.props;
+const cat = getCategoryDetails(category);
+
+const posts = await getAllPosts();
+const postsByCategory = posts.filter((p) => getCategorySlug(p.data.category) === category);
+
+const pagination = getPagination({ posts: postsByCategory, page });
+---
+
+<Layout title={cat.title} robots={{ index: postsByCategory.length > 0, follow: true }}>
+  <Container>
+    <TaxonomyPostList
+      title={`Category: ${cat.title}`}
+      description={`Posts in ${cat.title}`}
+      posts={pagination.paginatedPosts}
+    />
+    <Pagination
+      currentPage={pagination.currentPage}
+      totalPages={pagination.totalPages}
+      prevUrl={`/categories/${category}${Number(page) - 1 !== 1 ? '/' + (Number(page) - 1) : ''}/`}
+      nextUrl={`/categories/${category}/${Number(page) + 1}/`}
+    />
+  </Container>
+</Layout>

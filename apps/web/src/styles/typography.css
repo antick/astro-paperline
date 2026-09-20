@@ -1,0 +1,61 @@
+@import '@fontsource-variable/source-serif-4';
+@import '@fontsource-variable/source-serif-4/wght-italic.css';
+
+/* Define every font stack here. Layout styles only control size and spacing. */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: 'Source Serif 4 Variable', Georgia, ui-serif, serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --font-brand: var(--font-sans);
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.5;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+  }
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .reading-font,
+  .missing-sheet-number,
+  .missing-sheet-note,
+  .prose,
+  .about-content,
+  .sidebar-stories > li > span,
+  .sidebar-stories a {
+    font-family: var(--font-serif);
+  }
+  .brand {
+    font-family: var(--font-brand);
+  }
+  .brand-tagline,
+  .section-heading h2,
+  .article-toc-header h2,
+  .article-tags,
+  .about-links,
+  .creator-credit {
+    font-family: var(--font-sans);
+  }
+}

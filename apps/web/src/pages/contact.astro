@@ -1,0 +1,28 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Container from '@components/Container.astro';
+import PageTitle from '@components/PageTitle.astro';
+import { CREATOR } from '@data/creator';
+---
+
+<Layout title="Contact">
+  <Container>
+    <PageTitle>
+      <Fragment slot="title">Contact</Fragment>
+      <Fragment slot="desc">
+        This is a sample contact page. Add your own contact details when you make Paperline your
+        own.
+      </Fragment>
+    </PageTitle>
+    <div class="collection-list">
+      <p>For Paperline questions, find {CREATOR.name} on GitHub or visit the personal site.</p>
+      <ul class="mt-4 flex flex-wrap gap-5 text-skin-accent">
+        {CREATOR.links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Container>
+</Layout>

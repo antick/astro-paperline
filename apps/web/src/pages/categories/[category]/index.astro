@@ -1,0 +1,46 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Container from '@components/Container.astro';
+import TaxonomyPostList from '@components/TaxonomyPostList.astro';
+import Pagination from '@components/Pagination.astro';
+import { getAllPosts } from '@utils/content';
+import getPagination from '@utils/getPagination';
+import { categories, type Category } from '@data/category';
+import { getCategorySlug, getCategoryDetails } from '@utils/post';
+
+export async function getStaticPaths() {
+  const slugs = categories.map((c) => c.slug);
+
+  return slugs.map((category) => ({
+    params: { category },
+    props: { category }
+  }));
+}
+
+interface Props {
+  category: Category['slug'];
+}
+const { category } = Astro.props;
+const cat = getCategoryDetails(category);
+
+const posts = await getAllPosts();
+const postsByCategory = posts.filter((p) => getCategorySlug(p.data.category) === category);
+
+const pagination = getPagination({ posts: postsByCategory, page: 1, isIndex: true });
+---
+
+<Layout title={cat.title} robots={{ index: postsByCategory.length > 0, follow: true }}>
+  <Container>
+    <TaxonomyPostList
+      title={`Category: ${cat.title}`}
+      description={`Posts in ${cat.title}`}
+      posts={pagination.paginatedPosts}
+    />
+    <Pagination
+      currentPage={pagination.currentPage}
+      totalPages={pagination.totalPages}
+      prevUrl={`/categories/${category}${pagination.currentPage - 1 !== 1 ? '/' + (pagination.currentPage - 1) : ''}/`}
+      nextUrl={`/categories/${category}/${pagination.currentPage + 1}/`}
+    />
+  </Container>
+</Layout>

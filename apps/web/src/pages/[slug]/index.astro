@@ -1,0 +1,199 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import { getAllPosts } from '@utils/content';
+import Container from '@components/Container.astro';
+import Layout from '@layouts/Layout.astro';
+import { getFormattedDate, hasUpdatedDate } from '@utils/all';
+import PostCoverImage from '@components/PostCoverImage.astro';
+import ArticleTableOfContents from '@components/ArticleTableOfContents.astro';
+import ArticleTocTracker from '@components/ArticleTocTracker.astro';
+import RelatedPosts from '@components/RelatedPosts.astro';
+import { ARTICLE, SITE } from '../../config';
+import { SITE_SETTINGS } from '@settings';
+import { slugifyStr } from '@utils/slugify';
+import { getCategoryDetails, getPostImage, getPostPath, getPostSlug } from '@utils/post';
+
+type AstroProps = CollectionEntry<'blog'>;
+
+export async function getStaticPaths() {
+  const blog = await getAllPosts();
+
+  return blog.map((entry: CollectionEntry<'blog'>) => ({
+    params: { slug: getPostSlug(entry) },
+    props: { post: entry }
+  }));
+}
+
+export interface Props {
+  post: AstroProps;
+}
+
+const { post } = Astro.props;
+
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
+const readingTime = remarkPluginFrontmatter?.estReadingTime;
+const readingMinutes =
+  typeof readingTime === 'number' && Number.isFinite(readingTime)
+    ? Math.max(1, Math.round(readingTime))
+    : SITE_SETTINGS.article.readingTimeFallbackMinutes;
+const tableOfContentsSettings = SITE_SETTINGS.article.tableOfContents;
+const tableOfContents = headings.filter(
+  (heading) =>
+    heading.depth >= tableOfContentsSettings.minimumHeadingDepth &&
+    heading.depth <= tableOfContentsSettings.maximumHeadingDepth
+);
+const showTableOfContents =
+  SITE_SETTINGS.features.articleTableOfContents &&
+  tableOfContents.length >= tableOfContentsSettings.minimumItems;
+const showMobileTableOfContents = showTableOfContents && tableOfContentsSettings.mobileCollapsible;
+
+const category = getCategoryDetails(post.data.category);
+const postImage = getPostImage(post);
+const canonicalUrl = post.data.canonicalUrl ?? new URL(getPostPath(post), Astro.site).toString();
+const author = post.data.author ?? SITE.author;
+const authorUrl = post.data.authorUrl
+  ? new URL(post.data.authorUrl, Astro.site).toString()
+  : undefined;
+const resolvedOgImage = postImage.light ?? SITE.ogImage;
+const resolvedOgImageUrl = new URL(
+  typeof resolvedOgImage === 'string' ? resolvedOgImage : resolvedOgImage.src,
+  Astro.site
+).toString();
+const allPublishedPosts = await getAllPosts();
+const relatedPosts = post.data.relatedPosts
+  .map((slug) => allPublishedPosts.find((candidate) => getPostSlug(candidate) === slug))
+  .filter((candidate): candidate is CollectionEntry<'blog'> => Boolean(candidate));
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': post.data.schemaType,
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: author,
+    ...(authorUrl ? { url: authorUrl } : {})
+  },
+  image: {
+    '@type': 'ImageObject',
+    url: resolvedOgImageUrl,
+    ...(post.data.ogImageWidth ? { width: post.data.ogImageWidth } : {}),
+    ...(post.data.ogImageHeight ? { height: post.data.ogImageHeight } : {})
+  },
+  mainEntityOfPage: canonicalUrl,
+  inLanguage: post.data.language,
+  keywords: post.data.tags.join(', ')
+};
+---
+
+<Layout
+  title={post.data.title}
+  seoTitle={post.data.seoTitle}
+  desc={post.data.description}
+  canonicalUrl={canonicalUrl}
+  ogImage={resolvedOgImage}
+  ogImageAlt={postImage.alt}
+  ogImageWidth={post.data.ogImageWidth}
+  ogImageHeight={post.data.ogImageHeight}
+  socialCardType={post.data.socialCardType}
+  robots={post.data.robots}
+  language={post.data.language}
+  openGraphType="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  modifiedTime={(post.data.updatedDate ?? post.data.pubDate).toISOString()}
+  authorUrls={authorUrl ? [authorUrl] : undefined}
+  section={category.title}
+  tags={post.data.tags}
+  structuredData={structuredData}
+>
+  <Container
+    class={`article-container${showTableOfContents ? ' has-article-toc' : ''}`}
+    data-article-toc-root={showTableOfContents ? 'true' : undefined}
+    data-active-heading-offset={tableOfContentsSettings.activeHeadingOffsetPixels}
+    data-bottom-activation-offset={tableOfContentsSettings.bottomActivationOffsetPixels}
+  >
+    <header class="article-header">
+      <a class="story-topic" href={`/categories/${category.slug}`}>
+        {category.title}
+      </a>
+      <h1>{post.data.title}</h1>
+      {post.data.excerpt && <p>{post.data.excerpt}</p>}
+      <div class="article-meta">
+        <span>By {post.data.authorUrl ? <a href={post.data.authorUrl}>{author}</a> : author}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={post.data.pubDate.toISOString()}>
+          {getFormattedDate(post.data.pubDate)}
+        </time>
+        {hasUpdatedDate(post.data.pubDate, post.data.updatedDate) && post.data.updatedDate && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>
+              {ARTICLE.updatedLabel}{' '}
+              <time datetime={post.data.updatedDate.toISOString()}>
+                {getFormattedDate(post.data.updatedDate)}
+              </time>
+            </span>
+          </>
+        )}
+        <span aria-hidden="true">·</span>
+        <span>{readingMinutes} min read</span>
+      </div>
+    </header>
+
+    <div class="article-cover">
+      <PostCoverImage
+        src={postImage.light}
+        darkSrc={postImage.dark}
+        alt={postImage.alt}
+        title={post.data.title}
+        width={1600}
+        height={900}
+        widths={[400, 800, 1200, 1600]}
+        sizes="(max-width: 1280px) calc(100vw - 4rem), 1300px"
+        loading="eager"
+        class="h-full w-full object-cover"
+      />
+    </div>
+
+    {showMobileTableOfContents && (
+      <details class="article-toc-mobile">
+        <summary>{ARTICLE.mobileTableOfContentsLabel}</summary>
+        <ArticleTableOfContents
+          headings={tableOfContents}
+          label={ARTICLE.tableOfContentsLabel}
+          sectionLabel={ARTICLE.sectionLabel}
+          sectionsLabel={ARTICLE.sectionsLabel}
+          showHeader={false}
+        />
+      </details>
+    )}
+    <article class="article-body">
+      <div class="prose dark:prose-invert">
+        <Content />
+      </div>
+
+      <div class="article-tags">
+        {post.data.tags.map((tag: string) => (
+          <a href={`/tags/${slugifyStr(tag)}`}>#{tag}</a>
+        ))}
+      </div>
+      <div class="article-footer-link">
+        <a href={ARTICLE.archivePath}>{ARTICLE.backLabel}</a>
+      </div>
+      <RelatedPosts posts={relatedPosts} title={ARTICLE.relatedLabel} />
+    </article>
+    {showTableOfContents && (
+      <aside class="article-toc-column">
+        <ArticleTableOfContents
+          headings={tableOfContents}
+          label={ARTICLE.tableOfContentsLabel}
+          sectionLabel={ARTICLE.sectionLabel}
+          sectionsLabel={ARTICLE.sectionsLabel}
+        />
+      </aside>
+    )}
+  </Container>
+  {showTableOfContents && <ArticleTocTracker />}
+</Layout>

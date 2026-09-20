@@ -1,0 +1,31 @@
+@reference "./base.css";
+
+@layer components {
+  .site-footer {
+    @apply mt-auto border-t border-skin-line bg-skin-card/30;
+  }
+  .footer-inner {
+    @apply flex flex-col items-center gap-6 text-sm text-gray-600 dark:text-gray-300 md:flex-row md:flex-wrap;
+  }
+  .footer-inner .brand {
+    @apply mr-0;
+  }
+  .footer-inner nav {
+    @apply flex flex-wrap justify-center gap-x-5 gap-y-2 md:ml-auto;
+  }
+  .footer-inner nav a {
+    @apply transition-colors hover:text-skin-base;
+  }
+  .footer-details {
+    @apply mt-6 flex flex-col items-center gap-3 border-t border-skin-line pt-5 text-xs text-gray-600 dark:text-gray-300 md:flex-row md:justify-between;
+  }
+  .creator-credit {
+    @apply flex flex-wrap items-center gap-1.5 text-sm;
+  }
+  .creator-credit a {
+    @apply font-semibold text-skin-accent underline decoration-dotted underline-offset-4 hover:decoration-solid;
+  }
+  .creator-heart {
+    @apply text-skin-accent;
+  }
+}

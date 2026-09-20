@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostGridCard from '@components/PostGridCard.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  title: string;
+}
+
+const { posts, title } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="related-posts">
+    <SectionHeading title={title} />
+    <div class="latest-grid">
+      {posts.map((post) => (
+        <PostGridCard post={post} />
+      ))}
+    </div>
+  </section>
+)}

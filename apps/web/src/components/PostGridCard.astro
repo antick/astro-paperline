@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCoverImage from '@components/PostCoverImage.astro';
+import { getFormattedDate } from '@utils/all';
+import { getCategoryDetails, getPostImage, getPostPath } from '@utils/post';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const category = getCategoryDetails(post.data.category);
+const image = getPostImage(post);
+const path = getPostPath(post);
+---
+
+<article class="post-grid-card">
+  <a href={path} class="post-grid-image" tabindex="-1" aria-hidden="true">
+    <PostCoverImage
+      src={image.light}
+      darkSrc={image.dark}
+      alt={image.alt}
+      title={post.data.title}
+      width={image.width ?? 720}
+      height={image.height ?? 405}
+      widths={[360, 720]}
+      sizes="(max-width: 768px) 100vw, 38vw"
+      class="h-full w-full object-cover"
+    />
+  </a>
+  <div class="post-grid-copy">
+    <a class="story-topic" href={`/categories/${category.slug}`}>
+      {category.title}
+    </a>
+    <h3>
+      <a href={path}>{post.data.title}</a>
+    </h3>
+    <p>
+      <a href={path}>{post.data.excerpt}</a>
+    </p>
+    <time datetime={post.data.publishDate.toISOString()}>
+      {getFormattedDate(post.data.publishDate)}
+    </time>
+  </div>
+</article>

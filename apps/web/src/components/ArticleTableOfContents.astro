@@ -1,0 +1,48 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+  label: string;
+  sectionLabel: string;
+  sectionsLabel: string;
+  showHeader?: boolean;
+}
+
+const { headings, label, sectionLabel, sectionsLabel, showHeader = true } = Astro.props;
+const baseDepth = Math.min(...headings.map((heading) => heading.depth));
+const countLabel = headings.length === 1 ? sectionLabel : sectionsLabel;
+---
+
+<nav
+  class="article-toc"
+  aria-label={showHeader ? undefined : label}
+  aria-labelledby={showHeader ? 'article-toc-heading' : undefined}
+>
+  {showHeader && (
+    <div class="article-toc-header">
+      <h2 id="article-toc-heading">{label}</h2>
+      <span>
+        {headings.length} {countLabel}
+      </span>
+    </div>
+  )}
+  <ol>
+    {headings.map((heading) => (
+      <li
+        class:list={{
+          'article-toc-nested': heading.depth > baseDepth,
+          'article-toc-deep': heading.depth > baseDepth + 1
+        }}
+      >
+        <a href={`#${heading.slug}`} data-toc-link={heading.slug}>
+          {heading.text}
+        </a>
+      </li>
+    ))}
+  </ol>
+</nav>

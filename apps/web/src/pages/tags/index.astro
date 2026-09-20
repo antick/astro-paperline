@@ -1,0 +1,26 @@
+---
+import Container from '@components/Container.astro';
+import PageTitle from '@components/PageTitle.astro';
+import Tag from '@components/Tag.astro';
+import Layout from '@layouts/Layout.astro';
+import { getAllPosts } from '@utils/content';
+import getUniqueTags from '@utils/getUniqueTags';
+
+const tags = getUniqueTags(await getAllPosts());
+---
+
+<Layout title="Tags">
+  <Container>
+    <PageTitle>
+      <Fragment slot="title">Tags</Fragment>
+      <Fragment slot="desc">All the tags used in posts.</Fragment>
+    </PageTitle>
+    <div>
+      <ul>
+        {tags.map(({ tag, tagName }) => (
+          <Tag {tag} name={tagName} size="lg" />
+        ))}
+      </ul>
+    </div>
+  </Container>
+</Layout>

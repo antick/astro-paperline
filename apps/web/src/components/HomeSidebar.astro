@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SectionHeading from '@components/SectionHeading.astro';
+import { HOME } from '../config';
+import { getCategorySlug, getPopulatedCategories } from '@utils/post';
+import PopularTags from '@components/PopularTags.astro';
+import SurpriseMe from '@components/SurpriseMe.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+const categories = getPopulatedCategories(posts);
+---
+
+<div class="home-sidebar">
+  <SurpriseMe posts={posts} />
+
+  <section>
+    <SectionHeading title={HOME.topicsLabel} href="/categories" linkLabel="All" />
+    <div class="section-index">
+      {categories.map((category, index) => (
+        <a href={`/categories/${category.slug}`}>
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <strong>{category.title}</strong>
+          <small>
+            {posts.filter((post) => getCategorySlug(post.data.category) === category.slug).length}
+          </small>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <PopularTags posts={posts} />
+</div>

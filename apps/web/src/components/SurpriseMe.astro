@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SectionHeading from '@components/SectionHeading.astro';
+import { HOME } from '../config';
+import { getPostPath } from '@utils/post';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+const postPaths = posts.map(getPostPath);
+---
+
+{postPaths.length > 0 && (
+  <section>
+    <SectionHeading title={HOME.surpriseLabel} />
+    <div class="surprise-card" data-surprise-widget data-post-paths={JSON.stringify(postPaths)}>
+      <p>{HOME.surpriseDescription}</p>
+      <div>
+        <button type="button" data-surprise-trigger>
+          {HOME.surpriseButtonLabel}
+        </button>
+        <a href="/archive">{HOME.browseArchiveLabel}</a>
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  document.querySelectorAll('[data-surprise-widget]').forEach((widget) => {
+    const trigger = widget.querySelector('[data-surprise-trigger]');
+    const paths = JSON.parse(widget.getAttribute('data-post-paths') ?? '[]');
+
+    trigger?.addEventListener('click', () => {
+      const randomValue = new Uint32Array(1);
+      window.crypto.getRandomValues(randomValue);
+      const path = paths[(randomValue.at(0) ?? 0) % paths.length];
+
+      if (path) window.location.assign(path);
+    });
+  });
+</script>

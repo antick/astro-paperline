@@ -1,0 +1,105 @@
+---
+import Container from '@components/Container.astro';
+import PostGridCard from '@components/PostGridCard.astro';
+import PostCoverImage from '@components/PostCoverImage.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import SquarePostCard from '@components/SquarePostCard.astro';
+import HomeSidebar from '@components/HomeSidebar.astro';
+import Layout from '@layouts/Layout.astro';
+import { getAllPosts } from '@utils/content';
+import { getFormattedDate } from '@utils/all';
+import { HOME, UI } from '../config';
+import { SITE_SETTINGS } from '@settings';
+import { getCategoryDetails, getPostImage, getPostPath, getPostSlug } from '@utils/post';
+
+const latestPosts = await getAllPosts();
+const featuredPost = latestPosts.find((post) => post.data.featured) || latestPosts[0];
+const remainingPosts = latestPosts.filter(
+  (post) => !featuredPost || getPostSlug(post) !== getPostSlug(featuredPost)
+);
+const focusPostCount = SITE_SETTINGS.homepage.focusPostCount;
+const focusPosts = remainingPosts.slice(0, focusPostCount);
+const listPosts = remainingPosts.slice(
+  focusPostCount,
+  focusPostCount + SITE_SETTINGS.homepage.latestPostCount
+);
+const featuredCategory = featuredPost && getCategoryDetails(featuredPost.data.category);
+const featuredImage = featuredPost && getPostImage(featuredPost);
+const featuredPath = featuredPost && getPostPath(featuredPost);
+---
+
+<Layout title="">
+  <div>
+    <section class="home-intro">
+      <Container class="!py-0">
+        <p>{HOME.eyebrow}</p>
+        <h1>{HOME.title}</h1>
+        <div class="intro-description">{HOME.description}</div>
+      </Container>
+    </section>
+
+    <Container>
+      {featuredPost && featuredCategory && featuredImage && featuredPath ? (
+        <section class="featured-section">
+          <SectionHeading title={HOME.featuredLabel} />
+          <div class="edition-grid">
+            <div class="home-main">
+              <article class="featured-story">
+                <a href={featuredPath} class="featured-image" tabindex="-1" aria-hidden="true">
+                  <PostCoverImage
+                    src={featuredImage.light}
+                    darkSrc={featuredImage.dark}
+                    alt={featuredImage.alt}
+                    title={featuredPost.data.title}
+                    width={900}
+                    height={720}
+                    widths={[450, 900]}
+                    sizes="(max-width: 900px) 100vw, 58vw"
+                    loading="eager"
+                    class="h-full w-full object-cover"
+                  />
+                </a>
+                <div class="featured-copy">
+                  <a class="story-topic" href={`/categories/${featuredCategory.slug}`}>
+                    {featuredCategory.title}
+                  </a>
+                  <h2>
+                    <a href={featuredPath}>{featuredPost.data.title}</a>
+                  </h2>
+                  {featuredPost.data.excerpt && <p>{featuredPost.data.excerpt}</p>}
+                  <time datetime={featuredPost.data.publishDate.toISOString()}>
+                    {getFormattedDate(featuredPost.data.publishDate)}
+                  </time>
+                </div>
+              </article>
+
+              {listPosts.length > 0 && (
+                <section class="latest-section" id="latest">
+                  <SectionHeading title={HOME.latestLabel} href="/archive" />
+                  <div class="latest-grid">
+                    {listPosts.map((post) => (
+                      <PostGridCard post={post} />
+                    ))}
+                  </div>
+                </section>
+              )}
+            </div>
+
+            <aside class="home-rail" aria-label={HOME.sidebarLabel}>
+              {focusPosts.length > 0 && (
+                <section class="focus-grid" aria-label={HOME.cardLabel}>
+                  {focusPosts.map((post) => (
+                    <SquarePostCard post={post} preloadImage />
+                  ))}
+                </section>
+              )}
+              <HomeSidebar posts={latestPosts} />
+            </aside>
+          </div>
+        </section>
+      ) : (
+        <p class="empty-state">{UI.emptyPosts}</p>
+      )}
+    </Container>
+  </div>
+</Layout>

@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SectionHeading from '@components/SectionHeading.astro';
+import { HOME } from '../config';
+import { SITE_SETTINGS } from '@settings';
+import getUniqueTags from '@utils/getUniqueTags';
+import getPostsByTag from '@utils/getPostsByTag';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+const popularTags = getUniqueTags(posts)
+  .map(({ tag, tagName }) => ({ tag, tagName, count: getPostsByTag(posts, tag).length }))
+  .sort((left, right) => right.count - left.count || left.tagName.localeCompare(right.tagName))
+  .slice(0, SITE_SETTINGS.homepage.popularTagCount);
+---
+
+<section>
+  <SectionHeading title={HOME.popularTagsLabel} href="/tags" linkLabel="All" />
+  <div class="popular-tags">
+    {popularTags.map(({ tag, tagName, count }) => (
+      <a href={`/tags/${tag}`}>
+        <span>#{tagName}</span>
+        <small>{count}</small>
+      </a>
+    ))}
+  </div>
+</section>

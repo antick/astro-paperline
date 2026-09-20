@@ -1,0 +1,53 @@
+{
+  "name": "paperline-monorepo",
+  "version": "1.0.0",
+  "license": "MIT",
+  "packageManager": "bun@1.4.2",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "prepare": "husky",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "turbo check",
+    "preview": "turbo preview",
+    "dev:web": "turbo dev --filter=web",
+    "build:web": "turbo build --filter=web",
+    "clean": "rm -rf .turbo apps/*/.turbo apps/*/dist apps/*/.astro node_modules apps/*/node_modules",
+    "test": "bun run --cwd apps/web test",
+    "test:site": "bun run --cwd apps/web test:site",
+    "test:browser": "bun run --cwd apps/web test:browser",
+    "test:scenarios": "bun run --cwd apps/web test:scenarios"
+  },
+  "devDependencies": {
+    "husky": "9.1.7",
+    "lint-staged": "17.5.1",
+    "turbo": "2.10.13",
+    "prettier": "3.9.8",
+    "prettier-plugin-astro": "1.0.1",
+    "eslint": "10.10.0",
+    "@eslint/js": "10.0.1",
+    "typescript-eslint": "8.70.0",
+    "eslint-plugin-astro": "3.2.1",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-jsx-a11y-x": "0.2.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,mjs,cjs,ts,tsx,astro}": [
+      "eslint --fix --max-warnings 0",
+      "prettier --write"
+    ],
+    "*.{json,jsonc,css,md,mdx,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": "^24.21.0"
+  }
+}

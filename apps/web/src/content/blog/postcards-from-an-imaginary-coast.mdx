@@ -1,0 +1,75 @@
+---
+title: 'Postcards from an imaginary coast'
+description: 'A small illustrated travel journal with figures, captions, and two views of a place that exists only on this page.'
+pubDate: '2026-06-10'
+author: 'Paperline'
+authorUrl: '/about'
+category: 'Journal'
+subcategory: 'places'
+topic: 'coast'
+tags: ['sample', 'journal', 'images']
+draft: false
+ogImage: '../../assets/samples/postcards-from-an-imaginary-coast.webp'
+ogImageAlt: 'Paper sailboats on a dusty blue bay below cream cliffs and an orange sun.'
+ogImageWidth: 1536
+ogImageHeight: 1024
+relatedPosts: ['the-weekend-project-list', 'a-page-for-every-story']
+---
+
+import { Image } from 'astro:assets';
+import inlineImage1 from '../../assets/samples/postcards-from-an-imaginary-coast.webp';
+import inlineImage2 from '../../assets/samples/a-walk-without-a-destination.webp';
+
+_These postcards describe an imaginary coast. They are sample stories, not travel recommendations._
+
+## Postcard one: the harbor
+
+Dear friend,
+
+The harbor is smaller than the map made it seem. Two boats would almost fill it, and this morning there are exactly two. One has a blue sail. The other appears to have been painted the color of yesterday's sky.
+
+I found a table facing the water and ordered something warm. The postcard rack beside the door showed the same view in four seasons. I chose the empty card instead.
+
+<figure>
+  <Image
+    src={inlineImage1}
+    widths={[400, 800, 1200, 1536]}
+    sizes="(max-width: 900px) 90vw, 840px"
+    alt="Two paper sailboats float across a layered blue bay below pale coastal cliffs."
+    width="1536"
+    height="1024"
+    loading="lazy"
+  />
+  <figcaption>
+    {'The harbor at Bellweather Bay, an invented place illustrated for this sample.'}
+  </figcaption>
+</figure>
+
+## Postcard two: the inland path
+
+The path behind the harbor climbs through a stand of low trees. From the top, the sea looks like another sheet of paper laid beneath the hills. The houses are so small that a finger could hide the whole village.
+
+<figure>
+  <Image
+    src={inlineImage2}
+    widths={[400, 800, 1200, 1536]}
+    sizes="(max-width: 900px) 90vw, 840px"
+    alt="A narrow path curves through green paper hills toward a distant house."
+    width="1536"
+    height="1024"
+    loading="lazy"
+  />
+  <figcaption>
+    {'A second illustration from the sample collection gives the journey another scene.'}
+  </figcaption>
+</figure>
+
+## On the back of the card
+
+- **Weather:** enough wind to turn a page.
+- **Sound:** a rope tapping against a mast.
+- **Something to remember:** the blue cup on the harbor table.
+
+I will leave the rest unwritten. A postcard needs a little empty space for whatever the reader brings to it.
+
+_Until the next imaginary stop._
