@@ -82,7 +82,7 @@ bun run preview
 
 Deploy **`apps/web/dist/`** to your static host. Use `bun install --frozen-lockfile` as the install command and `bun run build` as the build command. Keep the host's normal 404 handling rather than rewriting missing URLs to the homepage.
 
-For Vercel, import the repository with its root directory unchanged; `vercel.json` supplies the build settings and enables Git deployments only from `main`. The Paperline demo also disables preview deployments in its Vercel project settings, so contributor PRs do not trigger builds there.
+For Vercel, import the repository with its root directory unchanged; `vercel.json` supplies the build settings and disables Git deployments and PR previews. Production deploys run only when a stable GitHub release is published or via manual `workflow_dispatch` in [`.github/workflows/vercel-production.yml`](.github/workflows/vercel-production.yml).
 
 ## Development checks
 

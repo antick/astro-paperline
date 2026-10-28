@@ -9,15 +9,16 @@ test('workflows isolate pull requests from write tokens and persisted checkout c
   for (const file of await readdir(directory)) {
     if (!/\.ya?ml$/.test(file)) continue;
     const workflow = Bun.YAML.parse(await Bun.file(resolve(directory, file)).text());
+    const releaseDeploy = file === 'vercel-production.yml';
     expect(workflow.on).not.toHaveProperty('pull_request_target');
     expect(workflow.on).not.toHaveProperty('workflow_run');
     expect(workflow.permissions).toEqual({ contents: 'read' });
-    expect(workflow.concurrency['cancel-in-progress']).toBe(true);
+    expect(workflow.concurrency['cancel-in-progress']).toBe(releaseDeploy ? false : true);
     for (const job of Object.values(workflow.jobs)) {
       expect(job.permissions ?? workflow.permissions).toEqual({ contents: 'read' });
       expect(job['runs-on']).toBe('ubuntu-latest');
       expect(job['timeout-minutes']).toBeGreaterThan(0);
-      expect(job['timeout-minutes']).toBeLessThanOrEqual(20);
+      expect(job['timeout-minutes']).toBeLessThanOrEqual(releaseDeploy ? 30 : 20);
       for (const step of job.steps) {
         if (!step.uses) continue;
         expect(step.uses).toMatch(/^[\w-]+\/[\w-]+@[a-f0-9]{40}$/);
