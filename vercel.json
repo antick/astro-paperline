@@ -5,9 +5,6 @@
   "buildCommand": "bun run build",
   "outputDirectory": "apps/web/dist",
   "git": {
-    "deploymentEnabled": {
-      "**": false,
-      "main": true
-    }
+    "deploymentEnabled": false
   }
 }
