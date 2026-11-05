@@ -1,0 +1,62 @@
+# Toolchain and task runner for Paperline. `mise install` once, then `mise run <task>`.
+# Tasks delegate to the root package.json scripts so both entry points stay identical.
+
+[tools]
+bun = "1.4.2"
+node = "24.21.0"
+
+[tasks.install]
+description = "Install dependencies from the lockfile"
+run = "bun install --frozen-lockfile"
+
+[tasks.dev]
+description = "Start all workspace dev servers"
+run = "bun run dev"
+
+[tasks."dev:web"]
+description = "Start the Astro site"
+run = "bun run dev:web"
+
+[tasks.build]
+description = "Build all apps"
+run = "bun run build"
+
+[tasks."build:web"]
+description = "Build the Astro site"
+run = "bun run build:web"
+
+[tasks.preview]
+description = "Preview production builds"
+run = "bun run preview"
+
+[tasks.format]
+description = "Format the repository"
+run = "bun run format"
+
+[tasks."format:check"]
+description = "Check formatting"
+run = "bun run format:check"
+
+[tasks.lint]
+description = "Lint the repository"
+run = "bun run lint"
+
+[tasks.check]
+description = "Typecheck all apps"
+run = "bun run check"
+
+[tasks.test]
+description = "Run unit tests"
+run = "bun run test"
+
+[tasks."test:site"]
+description = "Run site integration tests"
+run = "bun run test:site"
+
+[tasks."test:browser"]
+description = "Run Playwright browser tests"
+run = "bun run test:browser"
+
+[tasks."test:scenarios"]
+description = "Run publication scenario tests"
+run = "bun run test:scenarios"
