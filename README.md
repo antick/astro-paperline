@@ -50,6 +50,27 @@ bun run dev
 
 Open the local URL printed in your terminal. Use Bun for package management so the shared lockfile stays consistent.
 
+## mise
+
+If you use [mise](https://mise.jdx.dev/), run `mise install` once from the repository root, then `mise run <task>`:
+
+| Task             | What it runs                    |
+| ---------------- | ------------------------------- |
+| `install`        | `bun install --frozen-lockfile` |
+| `dev`            | `bun run dev`                   |
+| `dev:web`        | `bun run dev:web`               |
+| `build`          | `bun run build`                 |
+| `build:web`      | `bun run build:web`             |
+| `preview`        | `bun run preview`               |
+| `format`         | `bun run format`                |
+| `format:check`   | `bun run format:check`          |
+| `lint`           | `bun run lint`                  |
+| `check`          | `bun run check`                 |
+| `test`           | `bun run test`                  |
+| `test:site`      | `bun run test:site`             |
+| `test:browser`   | `bun run test:browser`          |
+| `test:scenarios` | `bun run test:scenarios`        |
+
 ## Make it yours
 
 The site lives in `apps/web/`. Start with these files:
